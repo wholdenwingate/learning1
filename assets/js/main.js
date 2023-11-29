@@ -30,17 +30,20 @@ async function displayView(view) {
 	window.location.hash = `${view}`;
 }
 function handleFires(firesData) {
-    // Handle the firesData here
     console.log(firesData);
 
-    const fireInfoArray = firesData.map(getInfo);
-    console.log(fireInfoArray);
+    firesData.map(section => {
+        console.log(section);
+    });
 }
 async function getFires() {
-    const script = document.createElement('script');
-    script.src = 'https://incidents.fire.ca.gov/umbraco/api/IncidentApi/List?inactive=true&callback=handleFires';
-    document.body.appendChild(script);
-    
+    try {
+        const response = await fetch('https://incidents.fire.ca.gov/umbraco/api/IncidentApi/List?inactive=true');
+        const firesData = await response.json();
+        handleFires(firesData);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }
 
 function getInfo(names) {
@@ -64,4 +67,4 @@ function getInfo(names) {
         end,
     }
 }
-handleFires();
+getFires();
