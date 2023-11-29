@@ -29,6 +29,9 @@ async function displayView(view) {
 	views[view].style.display = "block";
 	window.location.hash = `${view}`;
 }
+
+
+
 function handleFires(firesData) {
     console.log(firesData);
 
