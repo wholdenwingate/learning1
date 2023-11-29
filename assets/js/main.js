@@ -29,10 +29,39 @@ async function displayView(view) {
 	views[view].style.display = "block";
 	window.location.hash = `${view}`;
 }
+function handleFires(firesData) {
+    // Handle the firesData here
+    console.log(firesData);
+
+    const fireInfoArray = firesData.map(getInfo);
+    console.log(fireInfoArray);
+}
 async function getFires() {
-    const fires = await fetch("https://incidents.fire.ca.gov/umbraco/api/IncidentApi/List?inactive=true");
-    const firesData = await fires.json();
-    console.log(firesData)
+    const script = document.createElement('script');
+    script.src = 'https://incidents.fire.ca.gov/umbraco/api/IncidentApi/List?inactive=true&callback=handleFires';
+    document.body.appendChild(script);
+    
 }
 
-getFires()
+function getInfo(names) {
+    const fireName = names.name;
+    const location = names.location;
+    const county = names.county;
+    const link = names.url;
+    const acres = names.acresBurned;
+    const type = names.datatype;
+    const begin = names.started;
+    const end = names.extinguishedDateOnly;
+
+    return {
+        fireName,
+        location,
+        county,
+        link,
+        acres,
+        type,
+        begin,
+        end,
+    }
+}
+getFires();
