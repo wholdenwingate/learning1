@@ -64,4 +64,4 @@ function getInfo(names) {
         end,
     }
 }
-getFires();
+handleFires();
