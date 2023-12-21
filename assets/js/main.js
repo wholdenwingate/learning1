@@ -32,32 +32,34 @@ async function displayView(view) {
 
 
 
-function handleFires(firesData) {
-    console.log(firesData);
 
-    firesData.map(section => {
-        console.log(section);
-    });
-}
 async function getFires() {
     try {
-        const response = await fetch('https://incidents.fire.ca.gov/umbraco/api/IncidentApi/List?inactive=true');
+        const response = await fetch('https://incidents.fire.ca.gov/umbraco/api/IncidentApi/GeoJsonList?inactive=true');
         const firesData = await response.json();
         handleFires(firesData);
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 }
+function handleFires(firesData) {
+    console.log(firesData);
 
-function getInfo(names) {
-    const fireName = names.name;
-    const location = names.location;
-    const county = names.county;
-    const link = names.url;
-    const acres = names.acresBurned;
-    const type = names.datatype;
-    const begin = names.started;
-    const end = names.extinguishedDateOnly;
+    firesData.features.forEach(fire => {
+        const fireInfo = getInfo(fire.properties);
+        console.log('Fire Info:', fireInfo)
+    });
+}
+
+function getInfo(properties) {
+    const fireName = properties.name;
+    const location = properties.location;
+    const county = properties.county;
+    const link = properties.url;
+    const acres = properties.acresBurned;
+    const type = properties.datatype;
+    const begin = properties.started;
+    const end = properties.extinguishedDateOnly;
 
     return {
         fireName,
